@@ -20,16 +20,27 @@ class ResultTestCase(unittest.TestCase):
                 else:
                     self.mat_b[i, j] = m
 
-    def test_correct_result_via_natural_join(self):
-        output_filename = './output/hadoop-python-via-natural-join.txt'
+    def read_result_matrix(self, filename):
         mat = np.zeros((self.m, self.k))
 
-        with open(output_filename, 'r') as file:
+        with open(filename, 'r') as file:
             for line in file:
                 values = line.split(';')
                 i, j, m = [int(val) for val in values]
 
                 mat[i, j] = m
+
+        return mat
+
+    def test_correct_result_via_natural_join(self):
+        output_filename = './output/hadoop-python-via-natural-join.txt'
+        mat = self.read_result_matrix(output_filename)
+
+        np.testing.assert_array_equal(mat, np.matmul(self.mat_a, self.mat_b))
+
+    def test_correct_result_single_round(self):
+        output_filename = './output/hadoop-python-single-round.txt'
+        mat = self.read_result_matrix(output_filename)
 
         np.testing.assert_array_equal(mat, np.matmul(self.mat_a, self.mat_b))
 
