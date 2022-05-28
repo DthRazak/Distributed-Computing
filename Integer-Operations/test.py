@@ -23,6 +23,14 @@ class ResultTestCase(unittest.TestCase):
 
         self.assertTrue(len(set(numbers).difference(self.numbers_set)) == 0)
 
+    def test_correct_result_for_find_maximum(self):
+        output_filename = './output/hadoop-python-find-maximum.txt'
+
+        with open(output_filename, 'r') as file:
+            num = int(file.readline())
+
+            self.assertEqual(num, max(self.numbers_set))
+
 
 if __name__ == '__main__':
     unittest.main()
