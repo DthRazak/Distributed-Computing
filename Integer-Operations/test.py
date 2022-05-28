@@ -31,6 +31,19 @@ class ResultTestCase(unittest.TestCase):
 
             self.assertEqual(num, max(self.numbers_set))
 
+    def test_correct_result_for_find_distinct(self):
+        output_filename = './output/hadoop-python-find-distinct.txt'
+
+        numbers = list()
+        with open(output_filename, 'r') as file:
+            for line in file:
+                numbers.append(int(line))
+
+        counts = {item: self.numbers.count(item) for item in self.numbers}
+        counts = {key: value for key, value in counts.items() if value == 1}
+
+        self.assertTrue(len(set(counts.keys()).difference(set(numbers))) == 0)
+
 
 if __name__ == '__main__':
     unittest.main()
