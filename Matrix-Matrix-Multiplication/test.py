@@ -50,6 +50,12 @@ class ResultTestCase(unittest.TestCase):
 
         np.testing.assert_array_equal(mat, np.matmul(self.mat_a, self.mat_b))
 
+    def test_correct_result_banding_pattern(self):
+        output_filename = './output/hadoop-python-banding-pattern.txt'
+        mat = self.read_result_matrix(output_filename)
+
+        np.testing.assert_array_equal(mat, np.matmul(self.mat_a, self.mat_b))
+
 
 if __name__ == '__main__':
     unittest.main()
