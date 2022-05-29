@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
-import re
 import argparse
-from operator import add
 from pyspark.sql import SparkSession
 
 
-def mapper(word):
-    return word, 1
+def mapper(element):
+    # Each input element: word;number
+    values = element.split(';')
+    return values[0], int(values[1])
 
 
 def main():
@@ -19,25 +19,29 @@ def main():
 
     args = parser.parse_args()
 
-    spark = SparkSession\
-        .builder\
-        .appName('Word count')\
+    spark = SparkSession \
+        .builder \
+        .appName('Word mean') \
         .getOrCreate()
 
-    lines = spark\
-        .read\
-        .text(args.i)\
-        .rdd\
+    lines = spark \
+        .read \
+        .text(args.i) \
+        .rdd \
         .map(lambda r: r[0].strip())
 
-    counts = lines\
-        .flatMap(lambda line: re.findall(r"[\w']+", line.lower()))\
-        .map(mapper)\
-        .reduceByKey(add)
+    # Accumulating sum and count for a given key
+    seq_fun = (lambda v1, v2: (v1[0] + v2, v1[1] + 1))
+    comb_fun = (lambda v1, v2: (v1[0] + v2[0], v1[1] + v2[0]))
+
+    mean_values = lines \
+        .map(mapper) \
+        .aggregateByKey((0, 0), seq_fun, comb_fun) \
+        .mapValues(lambda val: round(val[0] / val[1], 2))
 
     # Note: This output is only for testing on a single computer
     # Change it if necessary
-    df = counts.toDF().toPandas()
+    df = mean_values.toDF().toPandas()
     df.to_csv(args.o, sep=';', index=False, header=False)
 
     spark.stop()
