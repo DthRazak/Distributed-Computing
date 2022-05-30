@@ -23,6 +23,16 @@ class ResultTestCase(unittest.TestCase):
 
         self.assertTrue(len(set(numbers).difference(self.numbers_set)) == 0)
 
+    def test_correct_pyspark_result_for_finding_duplicates(self):
+        output_filename = './output/pyspark-filter-duplicates.csv'
+        numbers = list()
+
+        with open(output_filename, 'r') as file:
+            for num in file:
+                numbers.append(int(num))
+
+        self.assertTrue(len(set(numbers).difference(self.numbers_set)) == 0)
+
     def test_correct_result_for_find_maximum(self):
         output_filename = './output/hadoop-python-find-maximum.txt'
 
@@ -33,6 +43,19 @@ class ResultTestCase(unittest.TestCase):
 
     def test_correct_result_for_find_distinct(self):
         output_filename = './output/hadoop-python-find-distinct.txt'
+
+        numbers = list()
+        with open(output_filename, 'r') as file:
+            for line in file:
+                numbers.append(int(line))
+
+        counts = {item: self.numbers.count(item) for item in self.numbers}
+        counts = {key: value for key, value in counts.items() if value == 1}
+
+        self.assertTrue(len(set(counts.keys()).difference(set(numbers))) == 0)
+
+    def test_correct_pyspark_result_for_find_distinct(self):
+        output_filename = './output/pyspark-find-distinct.csv'
 
         numbers = list()
         with open(output_filename, 'r') as file:
