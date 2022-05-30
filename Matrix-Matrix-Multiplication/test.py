@@ -38,8 +38,20 @@ class ResultTestCase(unittest.TestCase):
 
         np.testing.assert_array_equal(mat, np.matmul(self.mat_a, self.mat_b))
 
+    def test_correct_pyspark_result_via_natural_join(self):
+        output_filename = './output/pyspark-result-via-natural-join.csv'
+        mat = self.read_result_matrix(output_filename)
+
+        np.testing.assert_array_equal(mat, np.matmul(self.mat_a, self.mat_b))
+
     def test_correct_result_single_round(self):
         output_filename = './output/hadoop-python-single-round.txt'
+        mat = self.read_result_matrix(output_filename)
+
+        np.testing.assert_array_equal(mat, np.matmul(self.mat_a, self.mat_b))
+
+    def test_correct_pyspark_result_single_round(self):
+        output_filename = './output/pyspark-result-single-round.csv'
         mat = self.read_result_matrix(output_filename)
 
         np.testing.assert_array_equal(mat, np.matmul(self.mat_a, self.mat_b))
@@ -50,8 +62,20 @@ class ResultTestCase(unittest.TestCase):
 
         np.testing.assert_array_equal(mat, np.matmul(self.mat_a, self.mat_b))
 
+    def test_correct_pyspark_result_blocking_pattern(self):
+        output_filename = './output/pyspark-blocking.csv'
+        mat = self.read_result_matrix(output_filename)
+
+        np.testing.assert_array_equal(mat, np.matmul(self.mat_a, self.mat_b))
+
     def test_correct_result_banding_pattern(self):
         output_filename = './output/hadoop-python-banding-pattern.txt'
+        mat = self.read_result_matrix(output_filename)
+
+        np.testing.assert_array_equal(mat, np.matmul(self.mat_a, self.mat_b))
+
+    def test_correct_pyspark_result_banding_pattern(self):
+        output_filename = './output/pyspark-banding.csv'
         mat = self.read_result_matrix(output_filename)
 
         np.testing.assert_array_equal(mat, np.matmul(self.mat_a, self.mat_b))
