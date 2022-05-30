@@ -41,6 +41,14 @@ class ResultTestCase(unittest.TestCase):
 
             self.assertEqual(num, max(self.numbers_set))
 
+    def test_correct_pyspark_result_for_find_maximum(self):
+        output_filename = './output/pyspark-find-maximum.csv'
+
+        with open(output_filename, 'r') as file:
+            num = int(file.readline())
+
+            self.assertEqual(num, max(self.numbers_set))
+
     def test_correct_result_for_find_distinct(self):
         output_filename = './output/hadoop-python-find-distinct.txt'
 
